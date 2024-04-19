@@ -94,10 +94,12 @@ def second_file(previous_user, previous_associations):
         while i<len(explicit_list2):
             del explicit_list2[i][2]
             i+=1
-        
+        exist_second=True
     else:
-        print('ok :(')
-    return explicit_list2
+        print('ok, you anonymized only one list')
+        exist_second=False
+        explicit_list2=[]
+    return [explicit_list2,exist_second]
 
 
 #IMPORT THE EXPLICIT FILE
@@ -144,19 +146,25 @@ while i<len(explicit_list):
     i+=1
 
 #ANONIMIZATION OF A SECOND LOG FILE
-second_file_anonymized=second_file(user, associations)
+second_file_return=second_file(user, associations)
+second_file_anonymized=second_file_return[0]
+exist_second=second_file_return[1]
+
 
 #DE-ANONYMIZATION
 procede_de_anon = input('If you want to de-anonymize one list again, press 1, otherwise press 0\n')
 if procede_de_anon=='1':
-    which_list=input('press 1 if you wanto to de-anonymize the first file, 2 for the second one\n')
-    if which_list=='1':
-        deanon(explicit_list,associations)
-    elif which_list=='2':
-        deanon(second_file_anonymized,associations)
+    if exist_second==True:
+        which_list=input('press 1 if you wanto to de-anonymize the first file, 2 for the second one\n')
+        if which_list=='1':
+            deanon(explicit_list,associations)
+        elif which_list=='2':
+            deanon(second_file_anonymized,associations)
+        else:
+            print('you press a wrong number')
+        print('the list is NOT anonymized anymore')
     else:
-        print('you press a wrong number')
-    print('the list is NOT anonymized anymore')
+        deanon(explicit_list,associations)
 else:
     print('the list is still anonymized')
 
